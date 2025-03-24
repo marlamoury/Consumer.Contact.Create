@@ -1,0 +1,34 @@
+using Consumer.Create.Contact.Infrastructure.Messaging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Consumer.Contact.Create.Worker;
+
+public class RabbitWorker : BackgroundService
+{
+    private readonly ILogger<RabbitWorker> _logger;
+    private readonly RabbitMQConsumer _consumer;
+
+    public RabbitWorker(ILogger<RabbitWorker> logger, RabbitMQConsumer consumer)
+    {
+        _logger = logger;
+        _consumer = consumer;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("Worker iniciado...");
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            _logger.LogInformation("Worker em execução...");
+            await _consumer.StartAsync(stoppingToken);
+            await Task.Delay(1000, stoppingToken);
+        }
+
+        _logger.LogInformation("Worker finalizado.");
+    }
+
+}

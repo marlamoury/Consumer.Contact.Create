@@ -19,7 +19,7 @@ namespace Consumer.Create.Contact.Infrastructure.Persistence
         {
 
             // Garantir que a DataHoraRegistro seja atualizada antes de salvar
-            contato.DataHoraRegistro = DateTime.UtcNow;
+            contato.DataHoraRegistro = DateTime.Now;
 
             const string query = @"
             INSERT INTO contatos (nome, telefone, email, ddd, regiao, DataHoraRegistro) 
