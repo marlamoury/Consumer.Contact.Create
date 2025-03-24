@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Consumer.Contact.Create.Worker-f520473a-21d2-448a-82f8-554139868c43</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Consumer.Contact.Create.Application\Consumer.Contact.Create.Application.csproj" />
+    <ProjectReference Include="..\Consumer.Contact.Create.Domain\Consumer.Contact.Create.Domain.csproj" />
+    <ProjectReference Include="..\Consumer.Contact.Create.Infrastructure\Consumer.Contact.Create.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

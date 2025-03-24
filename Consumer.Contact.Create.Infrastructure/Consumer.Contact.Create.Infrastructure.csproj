@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
+    <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Consumer.Contact.Create.Application\Consumer.Contact.Create.Application.csproj" />
+    <ProjectReference Include="..\Consumer.Contact.Create.Domain\Consumer.Contact.Create.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
