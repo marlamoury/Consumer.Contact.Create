@@ -1,4 +1,4 @@
-name: .NET Consumer CI/CD
+name: .NET CI Pipeline
 
 on:
   push:
