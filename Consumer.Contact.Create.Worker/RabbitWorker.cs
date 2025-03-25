@@ -1,8 +1,4 @@
 using Consumer.Create.Contact.Infrastructure.Messaging;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Consumer.Contact.Create.Worker;
 

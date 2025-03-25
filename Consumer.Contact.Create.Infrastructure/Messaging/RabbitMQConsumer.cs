@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-
 namespace Consumer.Create.Contact.Infrastructure.Messaging
 {
     public class RabbitMQConsumer : BackgroundService
@@ -20,32 +19,40 @@ namespace Consumer.Create.Contact.Infrastructure.Messaging
         private IConnection _connection;
         private IModel _channel;
 
-        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IServiceProvider serviceProvider, RabbitMQSettings rabbitMqSettings)
+        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IServiceProvider serviceProvider, RabbitMQSettings rabbitMqSettings, IConnection connection = null, IModel channel = null)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
             _rabbitMqSettings = rabbitMqSettings;
 
-            try
+            if (connection == null || channel == null)
             {
-                var factory = new ConnectionFactory()
+                try
                 {
-                    HostName = _rabbitMqSettings.Host,
-                    UserName = _rabbitMqSettings.Username,
-                    Password = _rabbitMqSettings.Password
-                };
+                    var factory = new ConnectionFactory()
+                    {
+                        HostName = _rabbitMqSettings.Host,
+                        UserName = _rabbitMqSettings.Username,
+                        Password = _rabbitMqSettings.Password
+                    };
 
-                _connection = factory.CreateConnection();
-                _channel = _connection.CreateModel();
-                _channel.QueueDeclare(queue: _rabbitMqSettings.QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                    _connection = factory.CreateConnection();
+                    _channel = _connection.CreateModel();
+                    _channel.QueueDeclare(queue: _rabbitMqSettings.QueueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
 
-                _logger.LogInformation("Conectado ao RabbitMQ em {0} e aguardando mensagens na fila '{1}'...",
-                    _rabbitMqSettings.Host, _rabbitMqSettings.QueueName);
+                    _logger.LogInformation("Conectado ao RabbitMQ em {0} e aguardando mensagens na fila '{1}'...",
+                        _rabbitMqSettings.Host, _rabbitMqSettings.QueueName);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Erro ao conectar ao RabbitMQ: {0}", ex.Message);
+                    throw;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError("Erro ao conectar ao RabbitMQ: {0}", ex.Message);
-                throw;
+                _connection = connection;
+                _channel = channel;
             }
         }
 
