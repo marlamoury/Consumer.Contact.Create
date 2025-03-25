@@ -31,4 +31,4 @@ jobs:
         run: dotnet build Consumer.Contact.Create.sln --configuration Release
 
       - name: Run Unit Tests
-        run: dotnet test Consumer.Contact.Create.Test/Consumer.Contact.Create.Test.csproj --configuration Release --logger "console;verbosity=detailed"
+        run: dotnet test Consumer.Contact.Create.Tests/Consumer.Contact.Create.Tests.csproj --configuration Release --logger "console;verbosity=detailed"
