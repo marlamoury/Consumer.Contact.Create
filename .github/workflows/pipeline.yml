@@ -1,0 +1,34 @@
+name: .NET Consumer CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Setup Azure Functions Core Tools
+        run: npm install -g azure-functions-core-tools@4 --unsafe-perm true
+
+      - name: Restore dependencies
+        run: dotnet restore Consumer.Contact.Create.sln
+
+      - name: Build
+        run: dotnet build Consumer.Contact.Create.sln --configuration Release
+
+      - name: Run Unit Tests
+        run: dotnet test Consumer.Contact.Create.Test/Consumer.Contact.Create.Test.csproj --configuration Release --logger "console;verbosity=detailed"
