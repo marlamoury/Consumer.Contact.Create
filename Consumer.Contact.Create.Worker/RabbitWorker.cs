@@ -19,7 +19,6 @@ public class RabbitWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            _logger.LogInformation("Worker em execução...");
             await _consumer.StartAsync(stoppingToken);
             await Task.Delay(1000, stoppingToken);
         }

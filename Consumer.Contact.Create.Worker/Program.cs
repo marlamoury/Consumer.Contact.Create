@@ -2,8 +2,16 @@ using Consumer.Contact.Create.Worker;
 using Consumer.Create.Contact.Application.Services;
 using Consumer.Create.Contact.Infrastructure.Messaging;
 using Consumer.Create.Contact.Infrastructure.Persistence;
+using Serilog;
+
+// grava logs em um arquivo no kubernete k8s azure
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("/app/logs/criar-contatos/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
 IHost host = Host.CreateDefaultBuilder(args)
+    .UseSerilog()
     .ConfigureAppConfiguration((context, config) =>
     {
         // Carrega o arquivo appsettings.json
@@ -13,6 +21,10 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         // Carrega as configurações do RabbitMQ do appsettings.json
         var rabbitMqSettings = context.Configuration.GetSection("RabbitMQSettings").Get<RabbitMQSettings>();
+
+        if (rabbitMqSettings == null)        
+            throw new InvalidOperationException("RabbitMQSettings não pode ser nulo. Verifique o arquivo appsettings.json.");
+        
         services.AddSingleton(rabbitMqSettings);
 
         // Registrando serviços e repositórios
@@ -31,4 +43,3 @@ IHost host = Host.CreateDefaultBuilder(args)
     .Build();
 
 await host.RunAsync();
-
